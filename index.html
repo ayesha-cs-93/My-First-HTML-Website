@@ -4,168 +4,428 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ayesha Farooq | Portfolio & Data Science Journey</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* Modern Base Settings */
+        /* Modern Base Settings & CSS Variables for Dark Mode */
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --heading-color: #0f172a;
+            --sub-text: #64748b;
+            --primary: #4f46e5;
+            --border-color: #e2e8f0;
+            --input-bg: #f8fafc;
+            --chart-grid: #e2e8f0;
+            --terminal-bg: #1e293b;
+            --terminal-text: #38bdf8;
+            --success-color: #10b981;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #cbd5e1;
+            --heading-color: #f8fafc;
+            --sub-text: #94a3b8;
+            --primary: #818cf8;
+            --border-color: #334155;
+            --input-bg: #1e293b;
+            --chart-grid: #334155;
+            --terminal-bg: #0f172a;
+            --terminal-text: #34d399;
+        }
+
         body {
-            background-color: #f8fafc;
+            background-color: var(--bg-color);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #1e293b;
+            color: var(--text-color);
             margin: 0;
             padding: 0;
+            scroll-behavior: smooth;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         /* 1. Advance Navigation Bar */
         nav {
-            background-color: #ffffff;
+            background-color: var(--card-bg);
             padding: 15px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: background-color 0.3s ease;
         }
         nav .logo {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: bold;
-            color: #4f46e5;
+            color: var(--primary);
+            letter-spacing: 1px;
         }
         nav ul {
             list-style: none;
             display: flex;
             margin: 0;
             padding: 0;
+            align-items: center;
         }
         nav ul li {
-            margin-left: 20px;
+            margin-left: 25px;
         }
         nav ul li a {
             text-decoration: none;
-            color: #64748b;
+            color: var(--sub-text);
             font-weight: 500;
-            transition: color 0.3s;
+            transition: color 0.3s ease, transform 0.3s ease;
+            display: inline-block;
         }
         nav ul li a:hover {
-            color: #4f46e5;
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* Dark Mode Button Styling */
+        .theme-toggle-btn {
+            background: none;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .theme-toggle-btn:hover {
+            background-color: var(--primary);
+            color: white;
         }
 
         /* Container for perfect spacing */
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 40px auto;
-            padding: 0 20px;
+            padding: 0 30px;
         }
 
-        /* 2. Hero Section (Side-by-Side Layout) */
+        /* 2. Hero Section */
         .hero {
             display: flex;
+            flex-direction: row;
             align-items: center;
             justify-content: space-between;
             gap: 40px;
-            background-color: #ffffff;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-            margin-bottom: 40px;
+            background-color: var(--card-bg);
+            padding: 50px 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            margin-bottom: 50px;
+            transition: background-color 0.3s ease;
+        }
+        .hero-text {
+            flex: 1;
         }
         .hero-text h1 {
-            font-size: 32px;
+            font-size: 36px;
             margin-top: 0;
-            color: #0f172a;
+            color: var(--heading-color);
+            line-height: 1.2;
         }
         .hero-text p {
-            color: #64748b;
+            color: var(--sub-text);
             font-size: 16px;
-            line-height: 1.6;
+            line-height: 1.7;
         }
         
-        /* Figure and Image Styling */
         figure {
             margin: 0;
             text-align: center;
+            flex-shrink: 0;
         }
         .hero img {
             border-radius: 50%;
             width: 220px;
             height: 220px;
             object-fit: cover;
-            border: 4px solid #4f46e5;
+            border: 4px solid var(--primary);
+            box-shadow: 0 20px 25px -5px rgba(79, 70, 229, 0.2);
+            transition: transform 0.4s ease;
+        }
+        .hero img:hover {
+            transform: rotate(5deg) scale(1.05);
         }
         figcaption {
-            margin-top: 8px;
-            font-size: 12px;
-            color: #94a3b8;
+            margin-top: 12px;
+            font-size: 13px;
+            color: var(--sub-text);
             font-style: italic;
         }
 
-        /* 3. Projects Grid Section */
+        /* 3. Advance Skills Section */
+        .skills-section {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            margin-bottom: 50px;
+            transition: background-color 0.3s ease;
+        }
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
+        .skill-badge {
+            background-color: var(--bg-color);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            font-weight: 600;
+            color: var(--heading-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+        .skill-badge:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border-color: var(--primary);
+        }
+
+        /* 4. Projects Grid Section */
         .section-title {
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: #0f172a;
+            font-size: 26px;
+            margin-bottom: 25px;
+            color: var(--heading-color);
+            position: relative;
+            padding-bottom: 8px;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--primary);
+            border-radius: 2px;
         }
         .project-grid {
             display: flex;
-            gap: 20px;
+            gap: 25px;
             margin-bottom: 40px;
+            flex-wrap: wrap;
         }
         .project-card {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
             flex: 1;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-            border: 1px solid #e2e8f0;
+            min-width: 280px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
+        }
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
+            border-color: var(--primary);
         }
         .project-card h3 {
             margin-top: 0;
-            color: #4f46e5;
+            color: var(--primary);
+            font-size: 18px;
+            margin-bottom: 12px;
         }
         .project-card p {
-            color: #64748b;
+            color: var(--sub-text);
             font-size: 14px;
-            line-height: 1.5;
+            line-height: 1.6;
+            margin-bottom: 15px;
         }
 
-        /* Contact Section */
+        /* Dashboard Layout Config */
+        .dashboard-layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .analytics-container {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+        }
+        .analytics-container h4, .sql-simulator h4 {
+            margin: 0 0 15px 0;
+            color: var(--heading-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* SQL Terminal Simulator CSS */
+        .sql-simulator {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+        }
+        .terminal-input-wrapper {
+            background-color: var(--terminal-bg);
+            padding: 12px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .terminal-prompt {
+            color: #f43f5e;
+            font-weight: bold;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .terminal-input-wrapper input {
+            background: none;
+            border: none;
+            color: var(--terminal-text);
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 15px;
+            width: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        .terminal-input-wrapper input:focus {
+            outline: none;
+            box-shadow: none;
+        }
+        
+        .db-table-output {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 13px;
+        }
+        .db-table-output th {
+            background-color: var(--primary);
+            color: white;
+            text-align: left;
+            padding: 8px;
+        }
+        .db-table-output td {
+            padding: 8px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-color);
+        }
+        .sql-btn {
+            background-color: #10b981;
+            box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2);
+            padding: 8px 20px;
+            font-size: 14px;
+        }
+        .sql-hint {
+            font-size: 12px;
+            color: var(--sub-text);
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        /* 5. Contact Section & Toast Notification Style */
         .contact-section {
-            background: white;
+            background: var(--card-bg);
             padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-            margin-bottom: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            margin-bottom: 50px;
+            transition: background-color 0.3s ease;
+            position: relative;
+        }
+        .contact-section h2 {
+            margin-top: 0;
+            margin-bottom: 25px;
+            color: var(--heading-color);
+        }
+        form label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 14px;
+            color: var(--text-color);
         }
         input, textarea {
             width: 100%;
-            max-width: 400px;
-            padding: 10px;
-            margin-top: 8px;
-            margin-bottom: 15px;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
+            max-width: 500px;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
             display: block;
             font-family: inherit;
+            font-size: 14px;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            transition: border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+            box-sizing: border-box;
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background-color: var(--card-bg);
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
         }
         button {
-            background-color: #4f46e5;
+            background-color: var(--primary);
             color: white;
-            padding: 12px 24px;
+            padding: 12px 28px;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
-            transition: background 0.3s;
+            font-size: 15px;
+            transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
         }
         button:hover {
-            background-color: #3b31c1;
+            filter: brightness(0.9);
         }
 
-        /* Footer Styling */
+        .form-status {
+            display: none;
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+            max-width: 500px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        /* 6. Footer Styling */
         footer {
             text-align: center;
-            padding: 20px;
-            color: #94a3b8;
+            padding: 25px;
+            color: var(--sub-text);
             font-size: 14px;
-            border-top: 1px solid #e2e8f0;
-            background: white;
+            border-top: 1px solid var(--border-color);
+            background: var(--card-bg);
+        }
+
+        @media (max-width: 768px) {
+            nav { padding: 15px 20px; }
+            .hero { flex-direction: column-reverse; text-align: center; padding: 30px 20px; }
+            .project-grid, .dashboard-layout { flex-direction: column; grid-template-columns: 1fr; gap: 20px; }
+            .section-title::after { left: 50%; transform: translateX(-50%); }
+            .section-title { text-align: center; }
+            input, textarea { max-width: 100%; }
         }
     </style>
 </head>
@@ -176,8 +436,10 @@
             <div class="logo">AF</div>
             <ul>
                 <li><a href="#home">Home</a></li>
+                <li><a href="#skills">Skills</a></li>
                 <li><a href="#projects">Projects</a></li>
                 <li><a href="#contact">Contact</a></li>
+                <li><button class="theme-toggle-btn" id="themeToggle">🌙 Mode</button></li>
             </ul>
         </nav>
     </header>
@@ -196,26 +458,57 @@
             </figure>
         </section>
 
+        <section id="skills" class="skills-section">
+            <h2 class="section-title">Technical Skills</h2>
+            <div class="skills-grid">
+                <div class="skill-badge">🐍 Python (Data Science)</div>
+                <div class="skill-badge">📊 Data Analysis & EDA</div>
+                <div class="skill-badge">🗄️ SQL & Temporal Databases</div>
+                <div class="skill-badge">🌐 HTML5 & CSS3 Layouts</div>
+            </div>
+        </section>
+
         <section id="projects">
             <h2 class="section-title">My Technical Projects</h2>
             <div class="project-grid">
-                
                 <article class="project-card">
                     <h3>🚢 Titanic Dataset EDA</h3>
                     <p>Data cleaning, missing value imputation, and exploratory data analysis using Python and Pandas on Google Colab.</p>
                 </article>
-                
                 <article class="project-card">
                     <h3>🩸 Diabetes Prediction Pipeline</h3>
                     <p>Built a robust machine learning pipeline, scaled features, trained models, and exported the saved package (.pkl format).</p>
                 </article>
+            </div>
+
+            <div class="dashboard-layout">
                 
+                <div class="analytics-container">
+                    <h4>📊 Titanic Class Survival Analysis</h4>
+                    <canvas id="analyticsChart" width="400" height="220"></canvas>
+                </div>
+
+                <div class="sql-simulator">
+                    <h4>🖥️ Data Versioning Live SQL Terminal</h4>
+                    <div class="terminal-input-wrapper">
+                        <span class="terminal-prompt">ayesha_db></span>
+                        <input type="text" id="sqlQueryInput" value="SELECT * FROM version;">
+                    </div>
+                    <button class="sql-btn" onclick="executeMockSQL()">Run Query</button>
+                    <div class="sql-hint">Try querying: <b>SELECT * FROM version;</b> or <b>SELECT * FROM snapshot;</b></div>
+                    
+                    <div style="overflow-x:auto; margin-top:15px;">
+                        <table class="db-table-output" id="sqlTableResult">
+                            </table>
+                    </div>
+                </div>
+
             </div>
         </section>
 
         <section id="contact" class="contact-section">
-            <h2>Contact Me</h2>
-            <form>
+            <h2 class="section-title">Contact Me</h2>
+            <form id="portfolioContactForm">
                 <label for="username">Your Name:</label>
                 <input type="text" id="username" placeholder="Enter your name" required>
 
@@ -227,13 +520,130 @@
 
                 <button type="submit">Send Message</button>
             </form>
+            <div class="form-status" id="formStatusMsg">✨ Thank you! Your message has been sent successfully.</div>
         </section>
 
     </main>
 
     <footer>
-        <p>&copy; 2026 Ayesha Farooq. Built with modern HTML5 & CSS3. All Rights Reserved.</p>
+        <p>&copy; 2026 Ayesha Farooq. Built with modern HTML5, CSS3 & JavaScript Engine. All Rights Reserved.</p>
     </footer>
 
+    <script>
+        // 1. Theme Toggle Configuration
+        const themeToggleBtn = document.getElementById('themeToggle');
+        
+        themeToggleBtn.addEventListener('click', () => {
+            const currentTheme = document.body.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                document.body.removeAttribute('data-theme');
+                themeToggleBtn.textContent = '🌙 Mode';
+                updateChartTheme(false);
+            } else {
+                document.body.setAttribute('data-theme', 'dark');
+                themeToggleBtn.textContent = '☀️ Mode';
+                updateChartTheme(true);
+            }
+        });
+
+        // 2. Interactive Chart Setup (Chart.js)
+        const ctx = document.getElementById('analyticsChart').getContext('2d');
+        let config = {
+            type: 'bar',
+            data: {
+                labels: ['1st Class', '2nd Class', '3rd Class'],
+                datasets: [{
+                    label: 'Survival Rate (%)',
+                    data: [63, 47, 24],
+                    backgroundColor: ['#4f46e5', '#818cf8', '#c7d2fe'],
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true, max: 100, grid: { color: '#e2e8f0' }, ticks: { color: '#64748b' } },
+                    x: { grid: { display: false }, ticks: { color: '#64748b' } }
+                },
+                plugins: { legend: { labels: { color: '#64748b' } } }
+            }
+        };
+        let myChart = new Chart(ctx, config);
+
+        function updateChartTheme(isDark) {
+            const colorLabel = isDark ? '#cbd5e1' : '#64748b';
+            const colorGrid = isDark ? '#334155' : '#e2e8f0';
+            myChart.options.scales.y.grid.color = colorGrid;
+            myChart.options.scales.y.ticks.color = colorLabel;
+            myChart.options.scales.x.ticks.color = colorLabel;
+            myChart.options.plugins.legend.labels.color = colorLabel;
+            myChart.update();
+        }
+
+        // 3. Mock Data Engine for SQL Terminal
+        const mockDatabase = {
+            version: [
+                { version_id: 217, object_id: 117, version_number: 1, created_at: '2026-04-13 01:04:28', change_summary: 'V1' },
+                { version_id: 218, object_id: 118, version_number: 1, created_at: '2026-04-13 01:04:28', change_summary: 'V1' },
+                { version_id: 219, object_id: 119, version_number: 1, created_at: '2026-04-13 01:04:28', change_summary: 'V1' },
+                { version_id: 220, object_id: 120, version_number: 1, created_at: '2026-04-13 01:04:28', change_summary: 'V1' }
+            ],
+            snapshot: [
+                { snapshot_id: 17, object_id: 117, snapshot_time: '2026-04-13 03:07:15', created_by: 6 },
+                { snapshot_id: 18, object_id: 118, snapshot_time: '2026-04-13 03:07:15', created_by: 8 },
+                { snapshot_id: 19, object_id: 119, snapshot_time: '2026-04-13 03:07:15', created_by: 11 },
+                { snapshot_id: 20, object_id: 120, snapshot_time: '2026-04-13 03:07:15', created_by: 13 }
+            ]
+        };
+
+        function executeMockSQL() {
+            const rawQuery = document.getElementById('sqlQueryInput').value.trim().toLowerCase();
+            const tableElement = document.getElementById('sqlTableResult');
+            tableElement.innerHTML = "";
+
+            let targetData = [];
+            if (rawQuery.includes('from version')) {
+                targetData = mockDatabase.version;
+            } else if (rawQuery.includes('from snapshot')) {
+                targetData = mockDatabase.snapshot;
+            } else {
+                tableElement.innerHTML = "<tr><td style='color:red;'>⚠️ Syntax Error: Try 'SELECT * FROM version;' or 'SELECT * FROM snapshot;'</td></tr>";
+                return;
+            }
+
+            const headers = Object.keys(targetData[0]);
+            let headerHTML = "<tr>";
+            headers.forEach(header => headerHTML += `<th>${header}</th>`);
+            headerHTML += "</tr>";
+
+            let rowsHTML = "";
+            targetData.forEach(row => {
+                rowsHTML += "<tr>";
+                headers.forEach(header => rowsHTML += `<td>${row[header]}</td>`);
+                rowsHTML += "</tr>";
+            });
+
+            tableElement.innerHTML = headerHTML + rowsHTML;
+        }
+
+        // 4. Contact Form Submission Logic
+        document.getElementById('portfolioContactForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const statusMsg = document.getElementById('formStatusMsg');
+            statusMsg.style.display = 'block';
+            
+            // Clear fields after sending
+            this.reset();
+
+            // Auto hide after 4 seconds
+            setTimeout(() => {
+                statusMsg.style.display = 'none';
+            }, 4000);
+        });
+
+        // Run default table state on startup
+        executeMockSQL();
+    </script>
 </body>
 </html>
